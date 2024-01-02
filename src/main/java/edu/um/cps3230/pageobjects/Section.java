@@ -1,4 +1,4 @@
-package test.store.webtestautomation.pageobjects;
+package edu.um.cps3230.pageobjects;
 
 public enum Section {
     DESKTOPSANDLAPTOPS("pills-_desktops-laptops-tab"),
