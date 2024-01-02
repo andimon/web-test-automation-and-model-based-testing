@@ -1,4 +1,4 @@
-package test.store.webtestautomation.pageobjects;
+package edu.um.cps3230.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,8 +17,8 @@ public class ProductsViewComponent {
         return Integer.parseInt(product_counter.replaceAll(" products", ""));
     }
 
-    public void clickOnFistProductInPage() {
-        WebElement webElement = webDriver.findElements(By.className("product_detail_summary_title")).get(0);
+    public void selectFirstProduct() {
+        WebElement webElement = webDriver.findElements(By.className("products_grid")).get(0);
         webElement.click();
     }
 }
