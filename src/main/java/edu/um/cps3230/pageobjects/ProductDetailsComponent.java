@@ -1,4 +1,4 @@
-package test.store.webtestautomation.pageobjects;
+package edu.um.cps3230.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +10,10 @@ public class ProductDetailsComponent {
     }
 
     public String getProductTitle(){
-        return webDriver.findElement(By.className("product_card_grid_title")).getText();
+        return webDriver.findElement(By.className("products_grid")).getText();
+    }
+
+    public String getStockStatus(){
+        return webDriver.findElement(By.className("product_detail_summary_stock")).getText();
     }
 }
