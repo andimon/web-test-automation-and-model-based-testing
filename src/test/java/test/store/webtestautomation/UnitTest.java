@@ -1,27 +1,24 @@
-package test.store;
+package test.store.webtestautomation;
 
 
-import org.junit.Assert;
+import edu.um.cps3230.pageobjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import test.store.pageobjects.ProductsViewComponent;
-import test.store.pageobjects.SearchComponent;
-import test.store.pageobjects.Section;
-import test.store.pageobjects.SectionsComponent;
 
 import java.time.Duration;
 
 public class UnitTest {
     WebDriver webDriver;
-    SearchComponent searchComponent;
+    NavigationComponent searchComponent;
 
     SectionsComponent sectionsComponent;
 
     ProductsViewComponent productsViewComponent;
+    ProductDetailsComponent productDetailsComponent;
     Duration waitTime = Duration.ofSeconds(2);
 
     @BeforeEach
@@ -29,12 +26,13 @@ public class UnitTest {
         webDriver = new ChromeDriver();
 
         // Got to google and disable cookies dialogue
-        webDriver.get("https://www.klikk.com.mt");
+        webDriver.get("https://www.klikk.com.mt/product/30248_xiaomi-pocophone-poco-c65-4g-256gb--8gb-android-dual-sim-smartphone-black");
         // Maximise current window
         webDriver.manage().window().maximize();
-        searchComponent = new SearchComponent(webDriver);
+        searchComponent = new NavigationComponent(webDriver);
         sectionsComponent = new SectionsComponent(webDriver);
         productsViewComponent = new ProductsViewComponent(webDriver);
+        productDetailsComponent = new ProductDetailsComponent(webDriver);
     }
 
     @AfterEach
@@ -44,9 +42,7 @@ public class UnitTest {
 
     @Test
     public void test() {
-        searchComponent.search("phone");
-        Assertions.assertEquals(400, productsViewComponent.getNumberOfProductsInPage());
-        int x = 1;
+        Assertions.assertEquals("wow",productDetailsComponent.stockStatus());
     }
 
     @Test
