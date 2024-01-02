@@ -1,5 +1,6 @@
-package test.store;
+package test.store.webtestautomation;
 
+import edu.um.cps3230.pageobjects.*;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -9,18 +10,14 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.web.util.UriComponentsBuilder;
-import test.store.pageobjects.*;
 
 
-import java.net.URI;
 import java.net.URISyntaxException;
-
-import static io.cucumber.core.internal.com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.URI;
 
 public class StepDefinitions {
 
 
-    private SearchComponent searchComponent;
+    private NavigationComponent searchComponent;
     private SectionsComponent sectionsComponent;
     private ProductsViewComponent productsViewComponent;
 
@@ -42,7 +39,7 @@ public class StepDefinitions {
         //maximise to ensure that the page does not render the burger menu
         webDriver.manage().window().maximize();
         webDriver.get("https://www.klikk.com.mt");
-        searchComponent = new SearchComponent(webDriver);
+        searchComponent = new NavigationComponent(webDriver);
         sectionsComponent = new SectionsComponent(webDriver);
         productDetailsComponent = new ProductDetailsComponent(webDriver);
         productsViewComponent = new ProductsViewComponent(webDriver);
@@ -74,23 +71,23 @@ public class StepDefinitions {
     public void iShouldBeTakenToCOMPUTINGCategory(Section category) throws URISyntaxException {
         //assert using product tag bar text and approprate 
         String sectionURLQueryParam = UriComponentsBuilder.fromUriString(webDriver.getCurrentUrl()).build().getQueryParams().getFirst("t");
-        Assertions.assertEquals("_computing",sectionURLQueryParam);
+        Assertions.assertEquals("_computing", sectionURLQueryParam);
     }
 
     @And("the category should show at least {int} products")
     public void theCategoryShouldShowAtLeastProducts(int leastNumberOfProducts) {
         numberOfResults = productsViewComponent.getNumberOfProductsInPage();
-        Assertions.assertTrue(leastNumberOfProducts<=numberOfResults);
+        Assertions.assertTrue(leastNumberOfProducts <= numberOfResults);
     }
 
     @When("I click on the first product in the results")
     public void iClickOnTheFirstProductInTheResults() {
-        productsViewComponent.clickOnFistProductInPage();
+        productsViewComponent.selectFirstProduct();
     }
 
     @Then("I should be taken to the details page for that product")
     public void iShouldBeTakenToTheDetailsPageForThatProduct() {
-        Assertions.assertEquals(nameOfFirstProduct,productDetailsComponent.getProductTitle());
+        Assertions.assertEquals(nameOfFirstProduct, productDetailsComponent.getProductTitle());
     }
 
     @When("I click on the {category} category")
