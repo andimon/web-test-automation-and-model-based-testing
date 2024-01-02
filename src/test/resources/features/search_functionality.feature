@@ -5,6 +5,7 @@ Feature: Search Functionality
   I want to be able to have multiple choices of phones that are available
   on the market and be able to see the respective phone's specs/details
 
+  @SearchFunctionalityTest
   Scenario: Search functionality:
     Given I am a user of the website
     When I search for a product using the term "phone"

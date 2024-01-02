@@ -4,8 +4,9 @@ Feature: Reachability of Product Categories
   As a user of the technology shop
   I want to be able to choose a category and see products related to that category
 
+  @CategoriesTest
   Scenario: Reachability of product categories:
-    Given I am user of the website
+    Given I am a user of the website
     When I visit the store website
     And I click on the COMPUTING category
     Then I should be taken to COMPUTING category
