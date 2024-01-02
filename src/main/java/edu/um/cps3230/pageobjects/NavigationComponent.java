@@ -1,4 +1,4 @@
-package test.store.pageobjects;
+package edu.um.cps3230.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

@@ -1,4 +1,4 @@
-package test.store.pageobjects;
+package test.store.webtestautomation.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
