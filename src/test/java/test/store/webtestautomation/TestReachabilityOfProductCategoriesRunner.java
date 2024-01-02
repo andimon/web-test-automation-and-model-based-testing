@@ -1,4 +1,4 @@
-package test.store;
+package test.store.webtestautomation;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
