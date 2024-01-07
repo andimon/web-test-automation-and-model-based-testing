@@ -18,19 +18,19 @@ public class StepDefinitions {
 
 
     private NavigationComponent searchComponent;
-    private SectionsComponent sectionsComponent;
     private ProductsViewComponent productsViewComponent;
 
     private ProductDetailsComponent productDetailsComponent;
+
+    private NavigationComponent navigationComponent;
     private WebDriver webDriver;
     private int numberOfResults;
 
     private String nameOfFirstProduct;
 
     @ParameterType("COMPUTING|ELECTRONICS|BOOKS")
-    public Section category(String categoryName) {
-        // Convert the string to a Category ENUM
-        return Section.valueOf(categoryName);
+    public Category category(String categoryName) {
+        return Category.valueOf(categoryName);
     }
 
     @Given("I am a user of the website")
@@ -40,7 +40,7 @@ public class StepDefinitions {
         webDriver.manage().window().maximize();
         webDriver.get("https://www.klikk.com.mt");
         searchComponent = new NavigationComponent(webDriver);
-        sectionsComponent = new SectionsComponent(webDriver);
+        navigationComponent = new NavigationComponent(webDriver);
         productDetailsComponent = new ProductDetailsComponent(webDriver);
         productsViewComponent = new ProductsViewComponent(webDriver);
     }
@@ -58,7 +58,7 @@ public class StepDefinitions {
 
     @Then("I should see the search results")
     public void iShouldSeeTheSearchResults() {
-        numberOfResults = productsViewComponent.getNumberOfProductsInPage();
+        numberOfResults = productsViewComponent.getNumberOfProducts();
     }
 
     @And("there should be at least {int} products in the search results")
@@ -68,7 +68,7 @@ public class StepDefinitions {
 
 
     @Then("I should be taken to {category} category")
-    public void iShouldBeTakenToCOMPUTINGCategory(Section category) throws URISyntaxException {
+    public void iShouldBeTakenToCOMPUTINGCategory(Category category) throws URISyntaxException {
         //assert using product tag bar text and approprate 
         String sectionURLQueryParam = UriComponentsBuilder.fromUriString(webDriver.getCurrentUrl()).build().getQueryParams().getFirst("t");
         Assertions.assertEquals("_computing", sectionURLQueryParam);
@@ -76,13 +76,13 @@ public class StepDefinitions {
 
     @And("the category should show at least {int} products")
     public void theCategoryShouldShowAtLeastProducts(int leastNumberOfProducts) {
-        numberOfResults = productsViewComponent.getNumberOfProductsInPage();
+        numberOfResults = productsViewComponent.getNumberOfProducts();
         Assertions.assertTrue(leastNumberOfProducts <= numberOfResults);
     }
 
     @When("I click on the first product in the results")
     public void iClickOnTheFirstProductInTheResults() {
-        productsViewComponent.selectFirstProduct();
+        productsViewComponent.selectProduct(0);
     }
 
     @Then("I should be taken to the details page for that product")
@@ -91,7 +91,7 @@ public class StepDefinitions {
     }
 
     @When("I click on the {category} category")
-    public void iClickOnTheCOMPUTINGCategory(Section category) {
-        sectionsComponent.clickSectionById(category);
+    public void iClickOnTheCOMPUTINGCategory(Category category) {
+        navigationComponent.clickSectionById(category);
     }
 }

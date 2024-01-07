@@ -15,16 +15,21 @@ public class NavigationComponent {
     }
 
 
-    public void inputExpression(String expression){
+    private void inputExpression(String expression){
         webDriver.findElement(By.name("header-search-text")).sendKeys(expression);
     }
 
-    public void clickSearchButton(){
+    private void clickSearchButton(){
         webDriver.findElement(By.xpath("//i[contains(@class, 'fas fa-search')]")).click();
     }
 
-    public void search(String expression){
-        inputExpression(expression);
+    public void search(String searchVal){
+        inputExpression(searchVal);
         clickSearchButton();
+    }
+
+    public void clickSectionById(Category category){
+        webDriver.findElement(By.xpath("//button[@id='"+ category.button_id+"']")).click();
+        webDriver.findElement(By.xpath("//button[@onclick=\"location.href='/shop?c=1049&t=_computing';\"]")).click();
     }
 }

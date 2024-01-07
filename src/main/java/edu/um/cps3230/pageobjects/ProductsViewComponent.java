@@ -11,14 +11,14 @@ public class ProductsViewComponent {
         this.webDriver = webDriver;
     }
 
-    public int getNumberOfProductsInPage() {
+    public int getNumberOfProducts() {
         String product_counter = webDriver.findElement(By.id("products_showing_counter")).getText();
         product_counter = product_counter.replaceAll("Found [0-9]+ out of ", "");
         return Integer.parseInt(product_counter.replaceAll(" products", ""));
     }
 
-    public void selectFirstProduct() {
-        WebElement webElement = webDriver.findElements(By.className("products_grid")).get(0);
+    public void selectProduct(int index) {
+        WebElement webElement = webDriver.findElements(By.className("products_grid")).get(index);
         webElement.click();
     }
 }

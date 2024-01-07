@@ -3,6 +3,8 @@ package edu.um.cps3230;
 import edu.um.cps3230.pageobjects.ProductDetailsComponent;
 import edu.um.cps3230.pageobjects.ProductsViewComponent;
 import edu.um.cps3230.pageobjects.NavigationComponent;
+import edu.um.cps3230.pageobjects.Category;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class WebStoreOperator {
@@ -33,11 +35,17 @@ public class WebStoreOperator {
     }
 
     public boolean isProductPageEmpty(){
-        return productsViewComponent.getNumberOfProductsInPage()==0;
+        return productsViewComponent.getNumberOfProducts()==0;
     }
 
     public void selectFirstProduct(){
-        productsViewComponent.selectFirstProduct();
+        int firstProductIndex = 0;
+        productsViewComponent.selectProduct(firstProductIndex);
+    }
+
+    public void clickSectionById(Category category){
+        webDriver.findElement(By.xpath("//button[@id='"+ category.button_id+"']")).click();
+        webDriver.findElement(By.xpath("//button[@onclick=\"location.href='/shop?c=1049&t=_computing';\"]")).click();
     }
 
     public boolean isProductInStock(){

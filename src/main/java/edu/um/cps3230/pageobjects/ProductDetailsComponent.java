@@ -10,10 +10,16 @@ public class ProductDetailsComponent {
     }
 
     public String getProductTitle(){
-        return webDriver.findElement(By.className("products_grid")).getText();
+        return webDriver.findElement(By.className("product_detail_summary_title")).getText();
     }
 
-    public String getStockStatus(){
-        return webDriver.findElement(By.className("product_detail_summary_stock")).getText();
+    public StockStatus getStockStatus(){
+        String stock_status_message =  webDriver.findElement(By.className("product_detail_summary_stock")).getText();
+        for (StockStatus stockStatus : StockStatus.values()){
+            if(stockStatus.stock_status_message.equals(stock_status_message)){
+                return stockStatus;
+            }
+        }
+        throw new IllegalArgumentException("No stock status with status " + stock_status_message + " found");
     }
 }
