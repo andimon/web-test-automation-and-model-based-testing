@@ -1,9 +1,18 @@
 package edu.um.cps3230.pageobjects;
 
 import org.openqa.selenium.*;
+
 public class NavigationComponent {
 
     private final WebDriverMethods webDriverMethods;
+
+    private void inputExpression(String expression) {
+        webDriverMethods.sendKeys(By.name("header-search-text"), expression);
+    }
+
+    private void clickSearchButton() {
+        webDriverMethods.click(By.name("header_search_submit"));
+    }
 
 
     public NavigationComponent(WebDriver webDriver) {
@@ -14,14 +23,6 @@ public class NavigationComponent {
         webDriverMethods.click(By.id("home_logo"));
     }
 
-
-    private void inputExpression(String expression) {
-        webDriverMethods.sendKeys(By.name("header-search-text"), expression);
-    }
-
-    private void clickSearchButton() {
-        webDriverMethods.click(By.name("header_search_submit"));
-    }
 
     public void search(String searchVal) {
         inputExpression(searchVal);

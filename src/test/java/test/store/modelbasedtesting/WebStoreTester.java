@@ -61,8 +61,9 @@ public class WebStoreTester implements FsmModel {
         //action
         systemUnderTest.searchProduct("phone");
         //update state and state variables
-        currentPage = CurrentPage.PRODUCT_DETAILS_PAGE;
+        currentPage = CurrentPage.PRODUCTS_VIEW_PAGE;
         productsInPage = systemUnderTest.getNumberOfProducts();
+        inStock = false;
     }
 
 
@@ -89,13 +90,13 @@ public class WebStoreTester implements FsmModel {
         //action
         systemUnderTest.addToCart();
         //update state and state variables
-        isCartEmpty=false;
+        isCartEmpty = false;
     }
 
 
     public boolean selectProductGuard() {
         //check expected current state and variables
-        return (currentPage==CurrentPage.PRODUCTS_VIEW_PAGE) && (productsInPage>0) && (!inStock);
+        return (currentPage == CurrentPage.PRODUCTS_VIEW_PAGE) && (productsInPage > 0) && (!inStock);
     }
 
     public @Action void selectProduct() {
@@ -142,25 +143,27 @@ public class WebStoreTester implements FsmModel {
     }
 
     public boolean logoutGuard() {
-        return loggedIn;
+        return currentPage != CurrentPage.PRODUCT_DETAILS_PAGE && loggedIn;
     }
 
     public @Action void logout() {
         systemUnderTest.logout();
         loggedIn = false;
+        currentPage = CurrentPage.HOME_PAGE;
     }
 
     @Test
     public void WebStoreTesterRunner() {
         final GreedyTester tester = new GreedyTester(new WebStoreTester());
         tester.setRandom(new Random());
-        tester.buildGraph();
         tester.addListener(new StopOnFailureListener());
         tester.addListener("verbose");
         tester.addCoverageMetric(new TransitionPairCoverage());
         tester.addCoverageMetric(new StateCoverage());
         tester.addCoverageMetric(new ActionCoverage());
-        tester.generate(100);
+        //tester.buildGraph();
+        tester.generate(250);
         tester.printCoverage();
     }
 }
+

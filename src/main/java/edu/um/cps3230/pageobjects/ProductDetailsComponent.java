@@ -19,7 +19,7 @@ public class ProductDetailsComponent {
     public StockStatus getStockStatus() {
         String stockStatusMessage = webDriverMethods.getText(By.className("product_detail_summary_stock"));
         for (StockStatus stockStatus : StockStatus.values()) {
-            if (stockStatus.stock_status_message.equals(stockStatusMessage)) {
+            if (stockStatusMessage.contains(stockStatus.stock_status_message)) {
                 return stockStatus;
             }
         }

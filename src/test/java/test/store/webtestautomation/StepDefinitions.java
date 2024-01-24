@@ -30,11 +30,9 @@ public class StepDefinitions {
     private String nameOfFirstProduct;
 
     @After
-    public void teardown(){
+    public void teardown() {
         webDriver.quit();
     }
-
-
 
 
     @Given("I am a user of the website")
@@ -76,7 +74,6 @@ public class StepDefinitions {
         //assert using product tag bar text and approprate 
         String sectionURLQueryParam = UriComponentsBuilder.fromUriString(webDriver.getCurrentUrl()).build().getQueryParams().getFirst("t");
         String expectedQuery = category.queryParam;
-
         Assertions.assertEquals(expectedQuery, sectionURLQueryParam);
     }
 

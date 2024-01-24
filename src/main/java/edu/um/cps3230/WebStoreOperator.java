@@ -55,7 +55,7 @@ public class WebStoreOperator {
 
     public void clearCart() {
         //assuming current page is purchase page
-        webDriver.findElement(By.xpath("btn btn-block btn-clear-cart cart-actions")).click();
+        webDriver.findElement(By.xpath("//button[contains(@class,'btn btn-block btn-clear-cart cart-actions')]")).click();
     }
 
     public void addToCart() {
