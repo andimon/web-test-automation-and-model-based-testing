@@ -1,6 +1,7 @@
 package test.store.webtestautomation;
 
 import edu.um.cps3230.pageobjects.*;
+import io.cucumber.java.After;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -28,17 +29,19 @@ public class StepDefinitions {
 
     private String nameOfFirstProduct;
 
-    @ParameterType("COMPUTING|ELECTRONICS|BOOKS")
-    public Category category(String categoryName) {
-        return Category.valueOf(categoryName);
+    @After
+    public void teardown(){
+        webDriver.quit();
     }
+
+
+
 
     @Given("I am a user of the website")
     public void iAmAUserOfTheWebsite() {
         webDriver = new ChromeDriver();
         //maximise to ensure that the page does not render the burger menu
         webDriver.manage().window().maximize();
-        webDriver.get("https://www.klikk.com.mt");
         searchComponent = new NavigationComponent(webDriver);
         navigationComponent = new NavigationComponent(webDriver);
         productDetailsComponent = new ProductDetailsComponent(webDriver);
@@ -47,12 +50,13 @@ public class StepDefinitions {
 
     @When("I visit the store website")
     public void iVisitTheStoreWebsite() {
-        System.out.println("User already in Website");
+        webDriver.get("https://www.klikk.com.mt");
     }
 
 
     @When("I search for a product using the term {string}")
     public void iSearchForAProductUsingTheTerm(String arg0) {
+        webDriver.get("https://www.klikk.com.mt");
         searchComponent.search(arg0);
     }
 
@@ -71,7 +75,9 @@ public class StepDefinitions {
     public void iShouldBeTakenToCOMPUTINGCategory(Category category) throws URISyntaxException {
         //assert using product tag bar text and approprate 
         String sectionURLQueryParam = UriComponentsBuilder.fromUriString(webDriver.getCurrentUrl()).build().getQueryParams().getFirst("t");
-        Assertions.assertEquals("_computing", sectionURLQueryParam);
+        String expectedQuery = category.queryParam;
+
+        Assertions.assertEquals(expectedQuery, sectionURLQueryParam);
     }
 
     @And("the category should show at least {int} products")
@@ -82,7 +88,8 @@ public class StepDefinitions {
 
     @When("I click on the first product in the results")
     public void iClickOnTheFirstProductInTheResults() {
-        productsViewComponent.selectProduct(0);
+        //select product and return name of product selectd
+        nameOfFirstProduct = productsViewComponent.selectProduct(0);
     }
 
     @Then("I should be taken to the details page for that product")
@@ -90,8 +97,13 @@ public class StepDefinitions {
         Assertions.assertEquals(nameOfFirstProduct, productDetailsComponent.getProductTitle());
     }
 
+    @ParameterType("DESKTOPS_AND_LAPTOPS|PHONES_AND_TABLETS|COMPUTING|GAMING|HOME_AND_LIFE|ACCESSORIES|DEALS")
+    public Category category(String categoryName) {
+        return Category.valueOf(categoryName);
+    }
+
     @When("I click on the {category} category")
-    public void iClickOnTheCOMPUTINGCategory(Category category) {
+    public void iClickOnTheCategory(Category category) {
         navigationComponent.clickSectionById(category);
     }
 }

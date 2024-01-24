@@ -2,23 +2,24 @@ package edu.um.cps3230.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class ProductsViewComponent {
-    private WebDriver webDriver;
+
+    private final WebDriverMethods webDriverMethods;
 
     public ProductsViewComponent(WebDriver webDriver) {
-        this.webDriver = webDriver;
+        webDriverMethods = new WebDriverMethods(webDriver);
     }
 
     public int getNumberOfProducts() {
-        String product_counter = webDriver.findElement(By.id("products_showing_counter")).getText();
-        product_counter = product_counter.replaceAll("Found [0-9]+ out of ", "");
-        return Integer.parseInt(product_counter.replaceAll(" products", ""));
+        String productCounter = webDriverMethods.getText(By.id("products_showing_counter"));
+        productCounter = productCounter.replaceAll("Found [0-9]+ out of ", "");
+        return Integer.parseInt(productCounter.replaceAll(" products", ""));
     }
 
-    public void selectProduct(int index) {
-        WebElement webElement = webDriver.findElements(By.className("products_grid")).get(index);
-        webElement.click();
+    public String selectProduct(int index) {
+        String productName = webDriverMethods.getText(By.xpath("//p[contains(@class, 'product_card_grid_title')]"), index);
+        webDriverMethods.click(By.xpath("//div[@itemtype='http://schema.org/Product']"));
+        return productName;
     }
 }

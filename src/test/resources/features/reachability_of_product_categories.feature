@@ -8,19 +8,18 @@ Feature: Reachability of Product Categories
   Scenario Outline: Reachability of product categories:
     Given I am a user of the website
     When I visit the store website
-    And I click on the <category-name> category
-    Then I should be taken to <category-name> category
+    And I click on the <category> category
+    Then I should be taken to <category> category
     And the category should show at least <num-products> products
     When I click on the first product in the results
     Then I should be taken to the details page for that product
 
     Examples:
-      | category-name    | num-products |
-      | COMPUTING        | 400          |
-      | ELECTRONIC       | 0            |
-      | BOOK             | 0            |
-      | GAMING           | 0            |
-      | HOMEANDLIFE      | 0            |
-      | DEALS            | 0            |
-      | ACCESORIES       | 0            |
-      | PHONESANDTABLETS | 0            |
+      | category             | num-products |
+      | DESKTOPS_AND_LAPTOPS | 290          |
+      | PHONES_AND_TABLETS   | 1500         |
+      | COMPUTING            | 1300         |
+      | GAMING               | 340          |
+      | HOME_AND_LIFE        | 800          |
+      | ACCESSORIES          | 900          |
+      | DEALS                | 200          |

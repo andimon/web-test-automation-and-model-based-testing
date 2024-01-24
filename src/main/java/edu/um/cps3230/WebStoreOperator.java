@@ -1,22 +1,23 @@
 package edu.um.cps3230;
 
-import edu.um.cps3230.pageobjects.ProductDetailsComponent;
-import edu.um.cps3230.pageobjects.ProductsViewComponent;
-import edu.um.cps3230.pageobjects.NavigationComponent;
-import edu.um.cps3230.pageobjects.Category;
+import edu.um.cps3230.pageobjects.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WebStoreOperator {
     private WebDriver webDriver;
-    private NavigationComponent searchComponent;
+    private NavigationComponent navigationComponent;
     private ProductsViewComponent productsViewComponent;
 
     private ProductDetailsComponent productDetailsComponent;
 
+
     public WebStoreOperator(WebDriver webDriver) {
         this.webDriver = webDriver;
-        searchComponent = new NavigationComponent(webDriver);
+        initiateWebStore();
+        navigationComponent = new NavigationComponent(webDriver);
         productsViewComponent = new ProductsViewComponent(webDriver);
         productDetailsComponent = new ProductDetailsComponent(webDriver);
     }
@@ -27,28 +28,60 @@ public class WebStoreOperator {
     }
 
     public void searchProduct(String searchQuery) {
-        searchComponent.search(searchQuery);
+        webDriver.navigate().refresh();
+        navigationComponent.search(searchQuery);
     }
 
     public void returnToHome() {
-        searchComponent.returnToHomePage();
+        navigationComponent.returnToHomePage();
     }
 
-    public boolean isProductPageEmpty(){
-        return productsViewComponent.getNumberOfProducts()==0;
+    public boolean isProductPageEmpty() {
+        return productsViewComponent.getNumberOfProducts() == 0;
     }
 
-    public void selectFirstProduct(){
+    public void selectFirstProduct() {
         int firstProductIndex = 0;
         productsViewComponent.selectProduct(firstProductIndex);
     }
 
-    public void clickSectionById(Category category){
-        webDriver.findElement(By.xpath("//button[@id='"+ category.button_id+"']")).click();
+    public void clickSectionById(Category category) {
+        webDriver.findElement(By.xpath("//button[@id='" + category.buttonId + "']")).click();
         webDriver.findElement(By.xpath("//button[@onclick=\"location.href='/shop?c=1049&t=_computing';\"]")).click();
     }
 
-    public boolean isProductInStock(){
+    public void goToPurchasePage() {
+        navigationComponent.goToPurchasePage();
+    }
+
+    public void clearCart() {
+        //assuming current page is purchase page
+        webDriver.findElement(By.xpath("btn btn-block btn-clear-cart cart-actions")).click();
+    }
+
+    public void addToCart() {
+        webDriver.findElement(By.id("product_add_to_cart")).click();
+    }
+
+    public StockStatus getStockStatus() {
+        return productDetailsComponent.getStockStatus();
+    }
+
+    public boolean isProductInStock() {
         return productDetailsComponent.getStockStatus().equals("In stock");
+    }
+
+    public void login(String user, String pass) {
+        navigationComponent.login(user, pass);
+    }
+
+    public boolean logout() {
+        try {
+            navigationComponent.logout();
+            return true;
+        } catch (TimeoutException e) {
+            //check if login is display then return false
+            //else throw unexpected exeption
+        }
     }
 }
