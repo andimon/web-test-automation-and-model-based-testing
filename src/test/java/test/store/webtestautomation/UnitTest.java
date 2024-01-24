@@ -43,16 +43,7 @@ public class UnitTest {
 
     @Test
     public void test() throws InterruptedException {
-        for (int i=0;i<=100;i++)
-        {
-            webStoreOperator.login("katijik879@grassdev.com","test123!");
-            webStoreOperator.searchProduct("phone");
-            webStoreOperator.goToPurchasePage();
-            webDriver.navigate().refresh();
-            Thread.sleep(10000);
-            webStoreOperator.logout();
-        }
-
+        webStoreOperator.logout();
     }
 
 

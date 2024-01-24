@@ -17,6 +17,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.Random;
 
 public class WebStoreTester implements FsmModel {
+    private final Random random = new Random();
     WebDriver webDriver = new ChromeDriver();
     WebStoreOperator systemUnderTest;
 
@@ -27,7 +28,7 @@ public class WebStoreTester implements FsmModel {
 
     // Initial state variables
     boolean isCartEmpty = true;
-    boolean productsInPage = false;
+    int productsInPage = 0;
     boolean inStock = false;
     boolean loggedIn = false;
 
@@ -41,7 +42,7 @@ public class WebStoreTester implements FsmModel {
         //update state and state variables
         currentPage = CurrentPage.HOME_PAGE;
         isCartEmpty = true;
-        productsInPage = false;
+        productsInPage = 0;
         inStock = false;
         loggedIn = false;
         //reset SUT
@@ -55,97 +56,66 @@ public class WebStoreTester implements FsmModel {
         }
     }
 
-//    public boolean initiateWebStoreGuard() {
-//        return currentPage == CurrentPage.HOME_PAGE;
-//    }
-
-//    public @Action void initiateWebStore() {
-//        //open web store and set current state to homepage
-//        systemUnderTest = new WebStoreOperator(webDriver);
-//        currentPage = CurrentPage.HOME_PAGE;
-//        productsInPage = true;
-//    }
 
     public @Action void searchForPhone() {
-        //search for phone
+        //action
         systemUnderTest.searchProduct("phone");
-//        currentPage = CurrentPage.PRODUCTS_PAGE;
-        //assert that current product page is not empty
-        if (!systemUnderTest.isProductPageEmpty())
-            productsInPage = false;
+        //update state and state variables
+        currentPage = CurrentPage.PRODUCT_DETAILS_PAGE;
+        productsInPage = systemUnderTest.getNumberOfProducts();
     }
 
 
     public boolean returnToHomePageGuard() {
-        //check that current state is not the home page
+        //check expected current state and variables
         return currentPage != CurrentPage.HOME_PAGE;
     }
 
     public @Action void returnToHomePage() {
+        //action
         systemUnderTest.returnToHome();
+        //update state and state variables
         currentPage = CurrentPage.HOME_PAGE;
-        productsInPage = false;
+        productsInPage = 0;
         inStock = false;
     }
 
     public boolean addToCartGuard() {
-        //current state is product details page
-        boolean currentState = currentPage == CurrentPage.PRODUCT_DETAILS_PAGE;
-        //current state variables (f,f,y) or (t,f,f) or (t,f,t)
-        // i.e. we check that productsInPage is false
-        boolean stateVariables = !productsInPage;
-        return currentState && stateVariables;
+        //check expected current state and variables
+        return (currentPage == CurrentPage.PRODUCT_DETAILS_PAGE) && (productsInPage == 0) && inStock;
     }
 
     public @Action void addToCart() {
-        //guard => productsInPage is false
-        if (isCartEmpty && inStock) {
-            //product in stock so it can be added to cart
-            addToCart();
-            //cart is not empty anymore
-            isCartEmpty = false;
-        } else if (!isCartEmpty && inStock) {
-            //product in stock so it can be added to cart
-            addToCart();
-            //cart is already not empty
-        } else if (!isCartEmpty && !inStock) {
-            //product not in stock so it cannot be added to cart
-            //cart remains not empty
-        } else {
-            //product not in stock so it cannot be added to cart
-            //cart remains empty
-        }
+        //action
+        systemUnderTest.addToCart();
+        //update state and state variables
+        isCartEmpty=false;
     }
 
 
-    public boolean selectFirstProductGuard() {
-        boolean currentStateCheck = currentPage == CurrentPage.PRODUCTS_VIEW_PAGE;
-        //productsInPage should be true and inStock should be false
-        boolean stateVariableCheck = productsInPage && !inStock;
-        return currentStateCheck && stateVariableCheck;
+    public boolean selectProductGuard() {
+        //check expected current state and variables
+        return (currentPage==CurrentPage.PRODUCTS_VIEW_PAGE) && (productsInPage>0) && (!inStock);
     }
 
-    public @Action void selectFirstProduct() {
-        //select the first product
-        systemUnderTest.selectFirstProduct();
-        //set current state
+    public @Action void selectProduct() {
+        //action
+        systemUnderTest.selectProduct(random.nextInt(productsInPage));
+        //update state and state variables
         currentPage = CurrentPage.PRODUCT_DETAILS_PAGE;
-        //set state variables
-        //page has no selectable products
-        productsInPage = false;
-        //inStock true if product is in stock, else false
+        productsInPage = 0;
         inStock = systemUnderTest.getStockStatus() == StockStatus.IN_STOCK;
     }
 
     public boolean clearCartGuard() {
-        return currentPage == CurrentPage.PURCHASE_PAGE && !isCartEmpty && !productsInPage && !inStock;
+        //check expected current state and variables
+        return currentPage == CurrentPage.PURCHASE_PAGE && !isCartEmpty && (productsInPage == 0) && !inStock;
     }
 
     public @Action void clearCart() {
         //action
         systemUnderTest.clearCart();
-        //state remains the same
-        //update state variable
+        //update state and state variables
         isCartEmpty = true;
     }
 
@@ -156,10 +126,9 @@ public class WebStoreTester implements FsmModel {
     public @Action void goToPurchasePage() {
         //action
         systemUnderTest.goToPurchasePage();
-        //update state
+        //update state and state variables
         currentPage = CurrentPage.PURCHASE_PAGE;
-        //update state variables
-        productsInPage = false;
+        productsInPage = 0;
         inStock = false;
     }
 
@@ -181,22 +150,16 @@ public class WebStoreTester implements FsmModel {
         loggedIn = false;
     }
 
-
     @Test
     public void WebStoreTesterRunner() {
         final GreedyTester tester = new GreedyTester(new WebStoreTester());
-
         tester.setRandom(new Random());
-
         tester.buildGraph();
-
         tester.addListener(new StopOnFailureListener());
         tester.addListener("verbose");
-
         tester.addCoverageMetric(new TransitionPairCoverage());
         tester.addCoverageMetric(new StateCoverage());
         tester.addCoverageMetric(new ActionCoverage());
-
         tester.generate(100);
         tester.printCoverage();
     }

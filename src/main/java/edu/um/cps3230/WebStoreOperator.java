@@ -36,13 +36,12 @@ public class WebStoreOperator {
         navigationComponent.returnToHomePage();
     }
 
-    public boolean isProductPageEmpty() {
-        return productsViewComponent.getNumberOfProducts() == 0;
+    public int getNumberOfProducts() {
+        return productsViewComponent.getNumberOfProducts();
     }
 
-    public void selectFirstProduct() {
-        int firstProductIndex = 0;
-        productsViewComponent.selectProduct(firstProductIndex);
+    public void selectProduct(int productIndex) {
+        productsViewComponent.selectProduct(productIndex);
     }
 
     public void clickSectionById(Category category) {
@@ -75,13 +74,13 @@ public class WebStoreOperator {
         navigationComponent.login(user, pass);
     }
 
-    public boolean logout() {
+    public void logout() {
         try {
+            //try to logout
             navigationComponent.logout();
-            return true;
         } catch (TimeoutException e) {
-            //check if login is display then return false
-            //else throw unexpected exeption
+            //confirm that user is already logged out
+            webDriver.findElement(By.id("login_icon_blue"));
         }
     }
 }
