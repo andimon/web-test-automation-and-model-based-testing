@@ -26,6 +26,7 @@ public class WebDriverMethods {
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
                 if ((++count) == maxTries) {
+                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -41,6 +42,7 @@ public class WebDriverMethods {
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
                 if ((++count) == maxTries) {
+                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -55,6 +57,7 @@ public class WebDriverMethods {
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
                 if ((++count) == maxTries) {
+                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -69,6 +72,7 @@ public class WebDriverMethods {
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
                 if ((++count) == maxTries) {
+                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
