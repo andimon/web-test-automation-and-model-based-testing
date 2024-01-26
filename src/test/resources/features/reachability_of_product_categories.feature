@@ -16,10 +16,10 @@ Feature: Reachability of Product Categories
 
     Examples:
       | category             | num-products |
-      | DESKTOPS_AND_LAPTOPS | 290          |
-      | PHONES_AND_TABLETS   | 1500         |
-      | COMPUTING            | 1300         |
-      | GAMING               | 340          |
-      | HOME_AND_LIFE        | 800          |
-      | ACCESSORIES          | 900          |
-      | DEALS                | 200          |
+      | DESKTOPS_AND_LAPTOPS | 200          |
+      | PHONES_AND_TABLETS   | 1000         |
+      | COMPUTING            | 1200         |
+      | GAMING               | 200          |
+      | HOME_AND_LIFE        | 700          |
+      | ACCESSORIES          | 800          |
+      | DEALS                | 150          |

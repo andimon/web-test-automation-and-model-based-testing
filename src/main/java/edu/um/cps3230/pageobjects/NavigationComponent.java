@@ -47,6 +47,6 @@ public class NavigationComponent {
     }
 
     public void goToPurchasePage() {
-        webDriverMethods.click(By.xpath("//div[contains(@class,'d-inline')]"));
+        webDriverMethods.click(By.xpath("//a[contains(@href,'/cart')]"));
     }
 }

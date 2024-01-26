@@ -7,25 +7,23 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WebStoreOperator {
-    private WebDriver webDriver;
-    private NavigationComponent navigationComponent;
-    private ProductsViewComponent productsViewComponent;
+    public WebDriver webDriver;
+    private final NavigationComponent navigationComponent;
+    private final ProductsViewComponent productsViewComponent;
+    private final ProductDetailsComponent productDetailsComponent;
 
-    private ProductDetailsComponent productDetailsComponent;
+    private final WebDriverMethods webDriverMethods;
 
 
     public WebStoreOperator(WebDriver webDriver) {
         this.webDriver = webDriver;
-        initiateWebStore();
         navigationComponent = new NavigationComponent(webDriver);
         productsViewComponent = new ProductsViewComponent(webDriver);
         productDetailsComponent = new ProductDetailsComponent(webDriver);
+        webDriverMethods = new WebDriverMethods(webDriver);
     }
 
-    public void initiateWebStore() {
-        webDriver.manage().window().maximize();
-        webDriver.get("https://www.klikk.com.mt");
-    }
+
 
     public void searchProduct(String searchQuery) {
         webDriver.navigate().refresh();
@@ -44,11 +42,6 @@ public class WebStoreOperator {
         productsViewComponent.selectProduct(productIndex);
     }
 
-    public void clickSectionById(Category category) {
-        webDriver.findElement(By.xpath("//button[@id='" + category.buttonId + "']")).click();
-        webDriver.findElement(By.xpath("//button[@onclick=\"location.href='/shop?c=1049&t=_computing';\"]")).click();
-    }
-
     public void goToPurchasePage() {
         navigationComponent.goToPurchasePage();
     }
@@ -59,15 +52,11 @@ public class WebStoreOperator {
     }
 
     public void addToCart() {
-        webDriver.findElement(By.id("product_add_to_cart")).click();
+        webDriverMethods.click(By.id("product_add_to_cart"));
     }
 
     public StockStatus getStockStatus() {
         return productDetailsComponent.getStockStatus();
-    }
-
-    public boolean isProductInStock() {
-        return productDetailsComponent.getStockStatus().equals("In stock");
     }
 
     public void login(String user, String pass) {
@@ -82,5 +71,9 @@ public class WebStoreOperator {
             //confirm that user is already logged out
             webDriver.findElement(By.id("login_icon_blue"));
         }
+    }
+
+    public void setWebDriver(WebDriver webDriver) {
+        this.webDriver=webDriver;
     }
 }

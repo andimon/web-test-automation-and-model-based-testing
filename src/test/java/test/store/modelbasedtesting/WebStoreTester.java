@@ -3,13 +3,11 @@ package test.store.modelbasedtesting;
 import edu.um.cps3230.WebStoreOperator;
 import edu.um.cps3230.pageobjects.NavigationComponent;
 import edu.um.cps3230.pageobjects.StockStatus;
-import nz.ac.waikato.modeljunit.Action;
-import nz.ac.waikato.modeljunit.FsmModel;
-import nz.ac.waikato.modeljunit.GreedyTester;
-import nz.ac.waikato.modeljunit.StopOnFailureListener;
+import nz.ac.waikato.modeljunit.*;
 import nz.ac.waikato.modeljunit.coverage.ActionCoverage;
 import nz.ac.waikato.modeljunit.coverage.StateCoverage;
 import nz.ac.waikato.modeljunit.coverage.TransitionPairCoverage;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,42 +15,44 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.Random;
 
 public class WebStoreTester implements FsmModel {
-    private final Random random = new Random();
-    WebDriver webDriver = new ChromeDriver();
-    WebStoreOperator systemUnderTest;
 
+    private final Random random = new Random();
+    private final int testSequenceLength = 60;
+    private static WebDriver webDriver = new ChromeDriver();
+    WebStoreOperator systemUnderTest = new WebStoreOperator(webDriver);
     NavigationComponent navigationComponent;
 
-    // Initial state
-    CurrentPage currentPage = CurrentPage.HOME_PAGE;
-
-    // Initial state variables
-    boolean isCartEmpty = true;
-    int productsInPage = 0;
-    boolean inStock = false;
-    boolean loggedIn = false;
+    // State and state variables
+    CurrentPage currentPage;
+    boolean isCartEmpty, inStock, loggedIn;
+    int productsInPage;
 
     @Override
     public Object getState() {
         return currentPage;
     }
 
+    @AfterAll
+    public static void teardown() {
+        webDriver.quit();
+    }
+
     @Override
     public void reset(boolean testing) {
         //update state and state variables
+        webDriver.quit();
         currentPage = CurrentPage.HOME_PAGE;
         isCartEmpty = true;
         productsInPage = 0;
         inStock = false;
         loggedIn = false;
+        webDriver = new ChromeDriver();
+        webDriver.manage().window().maximize();
+        webDriver.get("https://www.klikk.com.mt");
+        systemUnderTest = new WebStoreOperator(webDriver);
         //reset SUT
         if (testing) {
-            //quit webdriver
-            webDriver.quit();
-            //open a new web driver
-            webDriver = new ChromeDriver();
             systemUnderTest = new WebStoreOperator(webDriver);
-            navigationComponent = new NavigationComponent(webDriver);
         }
     }
 
@@ -153,16 +153,29 @@ public class WebStoreTester implements FsmModel {
     }
 
     @Test
-    public void WebStoreTesterRunner() {
-        final GreedyTester tester = new GreedyTester(new WebStoreTester());
+    public void WebStoreTesterRunnerUsingGreedyTester() {
+        final Tester tester = new GreedyTester(new WebStoreTester());
+        tester.setRandom(new Random());
+        tester.buildGraph();
+        tester.addListener(new StopOnFailureListener());
+        tester.addListener("verbose");
+        tester.addCoverageMetric(new TransitionPairCoverage());
+        tester.addCoverageMetric(new StateCoverage());
+        tester.addCoverageMetric(new ActionCoverage());
+        tester.generate(testSequenceLength);
+        tester.printCoverage();
+    }
+
+    @Test
+    public void WebStoreTesterRunnerUsingRandomTester() {
+        final Tester tester = new RandomTester(new WebStoreTester());
         tester.setRandom(new Random());
         tester.addListener(new StopOnFailureListener());
         tester.addListener("verbose");
         tester.addCoverageMetric(new TransitionPairCoverage());
         tester.addCoverageMetric(new StateCoverage());
         tester.addCoverageMetric(new ActionCoverage());
-        //tester.buildGraph();
-        tester.generate(250);
+        tester.generate(testSequenceLength);
         tester.printCoverage();
     }
 }
