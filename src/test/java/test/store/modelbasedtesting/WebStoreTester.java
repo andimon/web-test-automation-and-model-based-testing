@@ -17,7 +17,7 @@ import java.util.Random;
 public class WebStoreTester implements FsmModel {
 
     private final Random random = new Random();
-    private final int testSequenceLength = 250;
+    private final int testSequenceLength = 1500;
     private static WebDriver webDriver = new ChromeDriver();
     WebStoreOperator systemUnderTest = new WebStoreOperator(webDriver);
     NavigationComponent navigationComponent;
