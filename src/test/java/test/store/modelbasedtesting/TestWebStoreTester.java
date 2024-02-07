@@ -1,7 +1,6 @@
 package test.store.modelbasedtesting;
 
 import edu.um.cps3230.WebStoreOperator;
-import edu.um.cps3230.pageobjects.NavigationComponent;
 import edu.um.cps3230.pageobjects.StockStatus;
 import nz.ac.waikato.modeljunit.*;
 import nz.ac.waikato.modeljunit.coverage.ActionCoverage;

@@ -74,7 +74,7 @@ public class WebStoreOperator {
      */
     public void logout() {
         try {
-            //try to logout
+            //try to log out
             navigationComponent.logout();
         } catch (TimeoutException e) {
             //confirm that user is already logged out
