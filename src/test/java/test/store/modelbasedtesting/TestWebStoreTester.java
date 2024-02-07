@@ -14,13 +14,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Random;
 
-public class WebStoreTester implements FsmModel {
+public class TestWebStoreTester implements FsmModel {
 
     private final Random random = new Random();
     private final int testSequenceLength = 1500;
     private static WebDriver webDriver = new ChromeDriver();
     WebStoreOperator systemUnderTest = new WebStoreOperator(webDriver);
-    NavigationComponent navigationComponent;
 
     // State and state variables
     CurrentPage currentPage;
@@ -154,7 +153,7 @@ public class WebStoreTester implements FsmModel {
 
     @Test
     public void WebStoreTesterRunnerUsingGreedyTester() {
-        final Tester tester = new GreedyTester(new WebStoreTester());
+        final Tester tester = new GreedyTester(new TestWebStoreTester());
         tester.setRandom(new Random());
         tester.buildGraph();
         tester.addListener(new StopOnFailureListener());
@@ -168,7 +167,7 @@ public class WebStoreTester implements FsmModel {
 
     @Test
     public void WebStoreTesterRunnerUsingRandomTester() {
-        final Tester tester = new RandomTester(new WebStoreTester());
+        final Tester tester = new RandomTester(new TestWebStoreTester());
         tester.setRandom(new Random());
         tester.addListener(new StopOnFailureListener());
         tester.addListener("verbose");
