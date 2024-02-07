@@ -4,8 +4,10 @@ import edu.um.cps3230.pageobjects.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * This class provides an SUT for model based testing.
+ */
 public class WebStoreOperator {
     public WebDriver webDriver;
     private final NavigationComponent navigationComponent;
@@ -22,7 +24,6 @@ public class WebStoreOperator {
         productDetailsComponent = new ProductDetailsComponent(webDriver);
         webDriverMethods = new WebDriverMethods(webDriver);
     }
-
 
 
     public void searchProduct(String searchQuery) {
@@ -46,9 +47,12 @@ public class WebStoreOperator {
         navigationComponent.goToPurchasePage();
     }
 
+    /**
+     * Assuming that we are in the purchase page then we clear cart.
+     */
     public void clearCart() {
         //assuming current page is purchase page
-        webDriver.findElement(By.xpath("//button[contains(@class,'btn btn-block btn-clear-cart cart-actions')]")).click();
+        webDriverMethods.click(By.xpath("//button[contains(@class,'btn btn-block btn-clear-cart cart-actions')]"));
     }
 
     public void addToCart() {
@@ -63,6 +67,11 @@ public class WebStoreOperator {
         navigationComponent.login(user, pass);
     }
 
+    /**
+     * Logout
+     * If we cannot manage then check if user is already logged out.
+     * If the user is not logged out then this method will throw an exception.
+     */
     public void logout() {
         try {
             //try to logout
@@ -74,6 +83,6 @@ public class WebStoreOperator {
     }
 
     public void setWebDriver(WebDriver webDriver) {
-        this.webDriver=webDriver;
+        this.webDriver = webDriver;
     }
 }
