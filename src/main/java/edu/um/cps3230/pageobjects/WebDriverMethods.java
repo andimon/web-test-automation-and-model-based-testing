@@ -69,8 +69,8 @@ public class WebDriverMethods {
                 break;
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
+                webDriver.navigate().refresh();
                 if ((++count) == maxTries) {
-                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -91,8 +91,8 @@ public class WebDriverMethods {
                 break;
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
+                webDriver.navigate().refresh();
                 if ((++count) == maxTries) {
-                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -112,8 +112,8 @@ public class WebDriverMethods {
                 return _getText(element);
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
+                webDriver.navigate().refresh();
                 if ((++count) == maxTries) {
-                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }
@@ -134,8 +134,8 @@ public class WebDriverMethods {
                 return _getText(element, index);
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error
+                webDriver.navigate().refresh();
                 if ((++count) == maxTries) {
-                    webDriver.navigate().refresh();
                     count = 0; //reset counter
                     throw e;
                 }

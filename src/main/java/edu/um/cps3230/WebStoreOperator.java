@@ -16,6 +16,11 @@ public class WebStoreOperator {
 
     private final WebDriverMethods webDriverMethods;
 
+    public boolean isCartEmpty = true;
+    public boolean inStock = false;
+    public boolean loggedIn = false;
+    public int productsInPage = 0;
+
 
     public WebStoreOperator(WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -41,10 +46,13 @@ public class WebStoreOperator {
 
     public void selectProduct(int productIndex) {
         productsViewComponent.selectProduct(productIndex);
+        productsInPage = 0;
     }
 
     public void goToPurchasePage() {
         navigationComponent.goToPurchasePage();
+        inStock = false;
+        productsInPage = 0;
     }
 
     /**
@@ -53,18 +61,23 @@ public class WebStoreOperator {
     public void clearCart() {
         //assuming current page is purchase page
         webDriverMethods.click(By.xpath("//button[contains(@class,'btn btn-block btn-clear-cart cart-actions')]"));
+        isCartEmpty = true;
     }
 
     public void addToCart() {
         webDriverMethods.click(By.id("product_add_to_cart"));
+        isCartEmpty = false;
     }
 
     public StockStatus getStockStatus() {
-        return productDetailsComponent.getStockStatus();
+        StockStatus stockStatus = productDetailsComponent.getStockStatus();
+        inStock = stockStatus == StockStatus.IN_STOCK;
+        return stockStatus;
     }
 
     public void login(String user, String pass) {
         navigationComponent.login(user, pass);
+        loggedIn = true;
     }
 
     /**
@@ -80,9 +93,6 @@ public class WebStoreOperator {
             //confirm that user is already logged out
             webDriver.findElement(By.id("login_icon_blue"));
         }
-    }
-
-    public void setWebDriver(WebDriver webDriver) {
-        this.webDriver = webDriver;
+        loggedIn = false;
     }
 }
