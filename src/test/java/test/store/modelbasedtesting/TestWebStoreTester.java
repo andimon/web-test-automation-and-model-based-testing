@@ -7,9 +7,11 @@ import nz.ac.waikato.modeljunit.coverage.ActionCoverage;
 import nz.ac.waikato.modeljunit.coverage.StateCoverage;
 import nz.ac.waikato.modeljunit.coverage.TransitionPairCoverage;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.uispec4j.assertion.Assertion;
 
 import java.util.Random;
 
@@ -30,10 +32,10 @@ public class TestWebStoreTester implements FsmModel {
         return currentPage;
     }
 
-    @AfterAll
-    public static void teardown() {
-        webDriver.quit();
-    }
+//    @AfterAll
+//    public static void teardown() {
+//        webDriver.quit();
+//    }
 
     @Override
     public void reset(boolean testing) {
@@ -62,6 +64,8 @@ public class TestWebStoreTester implements FsmModel {
         currentPage = CurrentPage.PRODUCTS_VIEW_PAGE;
         productsInPage = systemUnderTest.getNumberOfProducts();
         inStock = false;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
     }
 
 
@@ -77,6 +81,8 @@ public class TestWebStoreTester implements FsmModel {
         currentPage = CurrentPage.HOME_PAGE;
         productsInPage = 0;
         inStock = false;
+        //Assert State
+        Assertions.assertEquals(webDriver.getCurrentUrl(), currentPage.url);
     }
 
     public boolean addToCartGuard() {
@@ -89,6 +95,9 @@ public class TestWebStoreTester implements FsmModel {
         systemUnderTest.addToCart();
         //update state and state variables
         isCartEmpty = false;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
+        Assertions.assertEquals(isCartEmpty,systemUnderTest.isCartEmpty);
     }
 
 
@@ -104,6 +113,10 @@ public class TestWebStoreTester implements FsmModel {
         currentPage = CurrentPage.PRODUCT_DETAILS_PAGE;
         productsInPage = 0;
         inStock = systemUnderTest.getStockStatus() == StockStatus.IN_STOCK;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
+        Assertions.assertEquals(productsInPage,systemUnderTest.productsInPage);
+        Assertions.assertEquals(inStock,systemUnderTest.inStock);
     }
 
     public boolean clearCartGuard() {
@@ -115,7 +128,13 @@ public class TestWebStoreTester implements FsmModel {
         //action
         systemUnderTest.clearCart();
         //update state and state variables
+        currentPage=CurrentPage.HOME_PAGE;
         isCartEmpty = true;
+        inStock=false;
+        productsInPage=0;
+        //Assert State
+        Assertions.assertEquals(currentPage.url,webDriver.getCurrentUrl());
+        Assertions.assertEquals(isCartEmpty,systemUnderTest.isCartEmpty);
     }
 
     public boolean goToPurchasePageGuard() {
@@ -129,6 +148,10 @@ public class TestWebStoreTester implements FsmModel {
         currentPage = CurrentPage.PURCHASE_PAGE;
         productsInPage = 0;
         inStock = false;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
+        Assertions.assertEquals(inStock, systemUnderTest.inStock);
+        Assertions.assertEquals(productsInPage,systemUnderTest.productsInPage);
     }
 
     public boolean loginGuard() {
@@ -138,6 +161,9 @@ public class TestWebStoreTester implements FsmModel {
     public @Action void login() {
         systemUnderTest.login("katijik879@grassdev.com", "test123!");
         loggedIn = true;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
+        Assertions.assertEquals(loggedIn, systemUnderTest.loggedIn);
     }
 
     public boolean logoutGuard() {
@@ -148,6 +174,9 @@ public class TestWebStoreTester implements FsmModel {
         systemUnderTest.logout();
         loggedIn = false;
         currentPage = CurrentPage.HOME_PAGE;
+        //Assert State
+        Assertions.assertTrue(webDriver.getCurrentUrl().contains(currentPage.url));
+        Assertions.assertEquals(loggedIn, systemUnderTest.loggedIn);
     }
 
     @Test
