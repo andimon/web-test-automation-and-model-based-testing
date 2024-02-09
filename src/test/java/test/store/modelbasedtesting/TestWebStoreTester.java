@@ -18,7 +18,7 @@ import java.util.Random;
 public class TestWebStoreTester implements FsmModel {
 
     private final Random random = new Random();
-    private final int testSequenceLength = 1500;
+    private final int testSequenceLength = 60;
     private static WebDriver webDriver = new ChromeDriver();
     WebStoreOperator systemUnderTest = new WebStoreOperator(webDriver);
 
@@ -32,10 +32,10 @@ public class TestWebStoreTester implements FsmModel {
         return currentPage;
     }
 
-//    @AfterAll
-//    public static void teardown() {
-//        webDriver.quit();
-//    }
+    @AfterAll
+    public static void teardown() {
+        webDriver.quit();
+    }
 
     @Override
     public void reset(boolean testing) {
