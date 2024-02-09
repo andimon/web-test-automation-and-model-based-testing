@@ -44,9 +44,10 @@ public class WebStoreOperator {
         return productsViewComponent.getNumberOfProducts();
     }
 
-    public void selectProduct(int productIndex) {
-        productsViewComponent.selectProduct(productIndex);
+    public String selectProduct(int productIndex) {
+        String productName = productsViewComponent.selectProduct(productIndex);
         productsInPage = 0;
+        return productName;
     }
 
     public void goToPurchasePage() {

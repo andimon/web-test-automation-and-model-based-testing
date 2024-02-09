@@ -34,6 +34,15 @@ public class WebDriverMethods {
                 });
     }
 
+    private void _click(By element, int index) {
+        new WebDriverWait(webDriver, timeoutInSeconds)
+                .ignoring(StaleElementReferenceException.class, ElementNotInteractableException.class)
+                .until((WebDriver d) -> {
+                    d.findElements(element).get(index).click();
+                    return true;
+                });
+    }
+
 
     private void _sendKeys(By element, String charSequence) {
         new WebDriverWait(webDriver, timeoutInSeconds)
@@ -66,6 +75,22 @@ public class WebDriverMethods {
         while (true) {
             try {
                 _click(element);
+                break;
+            } catch (TimeoutException e) {
+                //We try to refresh page in case of 504 gateway error
+                webDriver.navigate().refresh();
+                if ((++count) == maxTries) {
+                    count = 0; //reset counter
+                    throw e;
+                }
+            }
+        }
+    }
+
+    public void click(By element, int index) {
+        while (true) {
+            try {
+                _click(element, index);
                 break;
             } catch (TimeoutException e) {
                 //We try to refresh page in case of 504 gateway error

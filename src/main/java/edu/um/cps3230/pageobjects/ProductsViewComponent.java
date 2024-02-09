@@ -37,7 +37,7 @@ public class ProductsViewComponent {
 
     public String selectProduct(int index) {
         String productName = webDriverMethods.getText(By.xpath("//p[contains(@class, 'product_card_grid_title')]"), index);
-        webDriverMethods.click(By.xpath("//div[@itemtype='http://schema.org/Product']"));
+        webDriverMethods.click(By.xpath("//div[@itemtype='http://schema.org/Product']"), index);
         return productName;
     }
 }

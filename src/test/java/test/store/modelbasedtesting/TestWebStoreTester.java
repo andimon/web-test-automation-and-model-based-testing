@@ -108,7 +108,10 @@ public class TestWebStoreTester implements FsmModel {
 
     public @Action void selectProduct() {
         //action
-        systemUnderTest.selectProduct(random.nextInt(productsInPage));
+        String name = systemUnderTest.selectProduct(random.nextInt(productsInPage));
+        System.out.println("Selecting product, products in page "+productsInPage);
+        System.out.println("Selected product: "+name);
+
         //update state and state variables
         currentPage = CurrentPage.PRODUCT_DETAILS_PAGE;
         productsInPage = 0;
